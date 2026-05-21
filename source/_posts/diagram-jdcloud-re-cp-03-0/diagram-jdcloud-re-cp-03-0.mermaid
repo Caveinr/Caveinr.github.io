@@ -1,0 +1,58 @@
+graph TD
+    %% 定义样式
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef memory fill:#ff9,stroke:#333,stroke-width:1px;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef wireless fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef interface fill:#ddd,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+    
+
+    subgraph 核心处理与存储
+        CPU[CPU: MT7986A<br>四核A53 2.0GHz]:::core
+        RAM[内存: NT5AD512M16C4-JR<br>容量: 1GB DDR4]:::memory
+        Flash["eMMC闪存:<br>FSEIASLD-64G(64G版)<br>FSEIASLD-128G(128G版)"]:::memory
+    end
+
+    subgraph 有线网络部分
+        PHY_2.5G[2.5G PHY芯片<br>RTL8221B]:::network
+        Switch[交换芯片<br>MT7531AE]:::network
+        Unused[空置]:::interface
+    end
+
+    subgraph 无线射频部分
+        RF_5G[5G RF射频芯片<br>MT7976AN]:::wireless
+        FEM_5G[4颗 5G FEM<br>康希通信 8575HE]:::wireless
+        
+        RF_2.4G[2.4G RF射频芯片<br>MT7976GN]:::wireless
+        FEM_2.4G[4颗 2.4G FEM<br>康希通信 8247HE]:::wireless
+        
+        Antenna((8根天线<br>外置6根+内置2根)):::interface
+    end
+    
+    subgraph 外围接口
+        Port_2.5G(2.5G 网口):::interface
+        Ports_1G(4个千兆网口):::interface
+    end
+
+    %% 连接关系 - 存储
+    CPU <--> RAM
+    CPU <--> Flash
+    
+    %% 连接关系 - 有线网络
+    CPU <-->|SGMII 总线| PHY_2.5G
+    CPU <-->|SGMII 总线| Switch
+    
+    PHY_2.5G <--> Port_2.5G
+    Switch <--> Ports_1G
+    
+    %% 连接关系 - 无线射频
+    CPU <--> RF_5G
+    CPU <--> RF_2.4G
+    
+    RF_5G <--> FEM_5G
+    RF_2.4G <--> FEM_2.4G
+    
+    FEM_5G <--> Antenna
+    FEM_2.4G <--> Antenna
+
+    Switch <-->|SGMII 总线| Unused
