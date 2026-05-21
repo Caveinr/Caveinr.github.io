@@ -1,0 +1,62 @@
+graph TD
+    %% 定义样式
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef memory fill:#ff9,stroke:#333,stroke-width:1px;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef wireless fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef interface fill:#ddd,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+
+    subgraph 核心处理与存储
+        CPU[CPU: MT7986A<br>四核A53 2.0GHz<br>集成2.4G/5G基带与MAC]:::core
+        RAM[内存: M15T4G16256A<br>容量: 512MB]:::memory
+        Flash[闪存: F50L1G41LB<br>容量: 128MB]:::memory
+    end
+
+    subgraph 有线网络部分
+        PHY1[2.5G PHY芯片 1<br>RTL8221B]:::network
+        Switch[千兆交换芯片<br>MT7531A]:::network
+        PHY2[2.5G PHY芯片 2<br>RTL8221B]:::network
+    end
+
+    subgraph 无线射频部分
+        RF5G[5G RF射频芯片<br>MT7976AN]:::wireless
+        FEM5G[4颗 5G FEM<br>QPF4588]:::wireless
+        
+        RF24G[2.4G RF射频芯片<br>MT7976GN]:::wireless
+        FEM24G[4颗 2.4G FEM<br>丝印: 3321 82d M009]:::wireless
+        
+        Antenna((8根外置天线)):::interface
+    end
+    
+    subgraph 外围接口
+        Port25G_1(2.5G 网口 1):::interface
+        Port25G_2(2.5G 网口 2):::interface
+        Ports1G(4个 千兆网口):::interface
+        USB(USB 3.0 接口<br>带屏蔽罩):::interface
+    end
+
+    %% 连接关系 - 存储
+    CPU <--> RAM
+    CPU <--> Flash
+    
+    %% 连接关系 - 有线网络 (已修正)
+    CPU <-->|SGMII 总线| PHY1
+    CPU <-->|SGMII 总线| Switch
+    Switch <-->|SGMII 总线| PHY2
+    
+    PHY1 <--> Port25G_1
+    PHY2 <--> Port25G_2
+    Switch <--> Ports1G
+    
+    %% 连接关系 - 无线射频
+    CPU <--> RF5G
+    CPU <--> RF24G
+    
+    RF5G <--> FEM5G
+    RF24G <--> FEM24G
+    
+    FEM5G <--> Antenna
+    FEM24G <--> Antenna
+    
+    %% 连接关系 - USB
+    CPU <--> USB
