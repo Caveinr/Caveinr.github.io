@@ -1,17 +1,18 @@
 ---
-title: XDR6088的带宽分配
+title: TP-Link XDR6088的带宽分配
 date: 2026-05-16 21:08:04
-tags: 路由器 拓扑图
-index_img: 2026/diagram-xdr6088/diagram-xdr6088.png
+tags: 
+  - 路由器
+  - 拓扑图
+index_img: 2026/diagram-tplink-xdr6088/diagram-tplink-xdr6088.png
 ---
 
 # 带宽图解
 
-{% asset_img diagram-xdr6088.png%}
+{% asset_img diagram-tplink-xdr6088.png%}
 
 注：虽然图中按照官方文档标注为SGMII，但就其速率而言应该是HiSGMII。
 
-<!-- more -->
 
 # 基本信息
 
