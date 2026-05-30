@@ -107,14 +107,3 @@ deploy:
   name: Caveinr
   email: Caveminer@outlook.com
 
-markdown:
-  preset: 'default'
-  render:
-    html: true
-    xhtmlOut: false
-    langPrefix: 'language-'
-    breaks: true
-    linkify: true
-    typographer: true
-  plugins:
-    - markdown-it-mathjax3

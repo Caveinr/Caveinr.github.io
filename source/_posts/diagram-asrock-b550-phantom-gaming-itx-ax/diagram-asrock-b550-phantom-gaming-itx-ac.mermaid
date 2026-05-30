@@ -1,0 +1,136 @@
+graph LR
+    %% ==========================================
+    %% 定义颜色样式 (严格参考官方架构图配色)
+    %% ==========================================
+    classDef amdRed fill:#ee2222,stroke:#a00,stroke-width:2px,color:#fff,font-weight:bold;
+    classDef pcie4Green fill:#5cf07c,stroke:#26ad43,stroke-width:2px,color:#000;
+    classDef pcie3Green fill:#8ee89c,stroke:#4caf50,stroke-width:2px,color:#000;
+    classDef usb10Orange fill:#ff782b,stroke:#d45100,stroke-width:2px,color:#fff;
+    classDef usb5Brown fill:#bf6236,stroke:#853e1c,stroke-width:2px,color:#fff;
+    classDef sataOrange fill:#ffb300,stroke:#d19300,stroke-width:2px,color:#000;
+    classDef displayWhite fill:#fff,stroke:#333,stroke-width:2px,color:#000;
+    classDef unusedWhite fill:#f9f9f9,stroke:#999,stroke-width:1px,stroke-dasharray: 4 4,color:#888;
+    classDef hubGrey fill:#e0e0e0,stroke:#888,stroke-width:1px,color:#333;
+    classDef interface fill:#ffffff,stroke:#333,stroke-width:1px,stroke-dasharray: 2 2;
+
+    %% ==========================================
+    %% 第一部分：AMD AM4 CPU 直连带宽分配
+    %% ==========================================
+    CPU[AMD - AM4 CPU<br>Ryzen 5000]:::amdRed
+
+    subgraph CPU 带宽池
+        direction TB
+        CPU_GPU[PCIe Gen 4.0 x16]:::pcie4Green
+        CPU_NVMe[PCIe Gen 4.0 x4]:::pcie4Green
+        
+        CPU_USB_10G[4 x USB 10 Gbps]:::usb10Orange
+        
+        CPU_Disp[Display Engine<br>显示输出引擎]:::displayWhite
+    end
+
+    %% CPU 到带宽池的连线
+    CPU === CPU_GPU
+    CPU === CPU_NVMe
+    CPU --- CPU_USB_10G
+    CPU === CPU_Disp
+
+    %% ==========================================
+    %% CPU 带宽池到实际接口的连线 
+    %% ==========================================
+    PCIe16_Slot(PCIe_1 插槽):::interface
+    M2_1_Slot(M.2_1 插槽):::interface
+    
+    Rear_TypeC(后置 Type-C 10G接口):::interface
+    Rear_TypeA(后置 USB 10G接口):::interface
+    
+    ASM1074[Hub芯片: ASM1074]:::hubGrey
+    Rear_5G(后置 USB 5G 接口 x4):::interface
+    
+    Rear_HDMI(后置 HDMI 2.1<br>仅限APU输出):::interface
+    Rear_DP(后置 DP 1.4<br>仅限APU输出):::interface
+
+    CPU_GPU ===|PCIe 4.0 x16<br>256 Gbps| PCIe16_Slot
+    CPU_NVMe ===|PCIe 4.0 x4<br>64 Gbps| M2_1_Slot
+    
+    CPU_USB_10G ---|USB 3.2<br>10 Gbps| Rear_TypeC
+    CPU_USB_10G ---|USB 3.2<br>10 Gbps| Rear_TypeA
+    
+    CPU_USB_10G ---|USB 3<br>5 Gbps| ASM1074
+    ASM1074 ---|USB 3<br>5 Gbps| Rear_5G
+    
+    %% 空置节点
+    CPU_USB_10G -.-> Unused_C1[空置]:::unusedWhite
+    
+    CPU_Disp ===|HDMI 2.1<br>48 Gbps| Rear_HDMI
+    CPU_Disp ===|DP 1.4<br>32.4 Gbps| Rear_DP
+
+    %% ==========================================
+    %% 核心通信链路
+    %% ==========================================
+    B550[CHIPSET B550<br>南桥芯片]:::amdRed
+    CPU ===|PCIe 3.0 x4<br>32 Gbps| B550
+
+    %% ==========================================
+    %% 第二部分：B550 芯片组带宽分配
+    %% ==========================================
+    subgraph B550 芯片组带宽池
+        direction TB
+        B550_M2[PCIe Gen 3.0 x4]:::pcie3Green
+        
+        B550_SATA_Native[4 x SATA III]:::sataOrange
+
+        B550_Shared[2 x PCIe 3.0 / 2 x SATA III<br>二选一共享]:::pcie3Green
+        
+        B550_USB10[2 x USB 10 Gbps]:::usb10Orange
+        B550_USB5[2 x USB 5 Gbps]:::usb5Brown
+        
+        B550_USB2[6 x USB 2.0 480 Mbps]:::displayWhite
+    end
+
+    %% B550 到带宽池的连线
+    B550 === B550_M2
+    B550 === B550_SATA_Native
+    B550 === B550_Shared
+
+    B550 --- B550_USB10
+    B550 --- B550_USB5
+    B550 --- B550_USB2
+
+    %% ==========================================
+    %% B550 带宽池到实际接口的连线
+    %% ==========================================
+    M2_2_Slot(M.2_2 插槽):::interface
+    
+    LAN_Chip[2.5G网卡: I225-V]:::hubGrey
+    LAN_Port(2.5G LAN 网口):::interface
+    WIFI_Chip[无线网卡: AX200]:::hubGrey
+    
+    SATA_Ports(SATA_1至4 接口):::interface
+
+    Front_TypeC(前置 Type-C 10G插针):::interface
+    Front_5G(前置 USB 5G 插针 x2):::interface
+    
+    Front_USB2(前置 USB 480M 9-pin 插针):::interface
+    BT_Internal(内部蓝牙协议走线):::interface
+
+    B550_M2 ===|PCIe 3.0 x4<br>32 Gbps| M2_2_Slot
+    
+    B550_Shared ---|PCIe 3.0 x1<br>8 Gbps| LAN_Chip
+    LAN_Chip ---|Ethernet<br>2.5 Gbps| LAN_Port
+    
+    B550_Shared ---|PCIe 3.0 x1<br>8 Gbps| WIFI_Chip
+    
+    B550_SATA_Native ===|SATA 3.0<br>6 Gbps| SATA_Ports
+    
+    B550_USB10 ---|USB 3.2<br>10 Gbps| Front_TypeC
+    
+    %% 空置节点
+    B550_USB10 -.-> Unused_B3[空置]:::unusedWhite
+    
+    B550_USB5 ---|USB 3<br>5 Gbps| Front_5G
+    
+    B550_USB2 ---|USB 2.0<br>480 Mbps| Front_USB2
+    B550_USB2 ---|USB 2.0<br>480 Mbps| BT_Internal
+    
+    %% 空置节点
+    B550_USB2 -.-> Unused_B4[空置]:::unusedWhite
