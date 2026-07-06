@@ -1,0 +1,53 @@
+graph TD
+    %% 定义样式
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef memory fill:#ff9,stroke:#333,stroke-width:1px;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef wireless fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef interface fill:#ddd,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+
+    subgraph 核心处理与存储
+        CPU[CPU: MT7987A<br>四核A53 2.0GHz]:::core
+        RAM[内存: QN3B256M16S-21B<br>容量: 512MB]:::memory
+        Flash[闪存: 25N01KVZE1R<br>容量: 128MB]:::memory
+    end
+
+    subgraph 有线网络部分
+        PHY1[2.5G PHY芯片 1<br>EN8811H]:::network
+        Switch[千兆交换芯片<br>AN8855]:::network
+    end
+
+    subgraph 无线射频部分
+        WLANMAC[无线MAC芯片<br>MT7992AV]:::wireless
+
+        RF5G[5G RF射频芯片<br>MT7979N]:::wireless
+        RF24G[2.4G RF射频芯片<br>MT7975N]:::wireless
+        
+        Antenna((5根外置天线)):::interface
+    end
+    
+    subgraph 外围接口
+        Port25G_1(2.5G 网口 1):::interface
+        Port25G_2(2.5G 网口 2):::interface
+        Ports1G(3个 千兆网口):::interface
+    end
+
+    %% 连接关系 - 存储
+    CPU <--> RAM
+    CPU <--> Flash
+    
+    %% 连接关系 - 有线网络
+    CPU <-->|HSGMII 总线| PHY1
+    CPU <-->|HSGMII 总线| Switch
+    
+    PHY1 <--> Port25G_1
+    CPU <--> Port25G_2
+    Switch <--> Ports1G
+    
+    %% 连接关系 - 无线射频
+    CPU <-->|PCIE 3.0 x2| WLANMAC
+    WLANMAC <--> RF5G
+    WLANMAC <--> RF24G
+    
+    RF5G <--> Antenna
+    RF24G <--> Antenna
