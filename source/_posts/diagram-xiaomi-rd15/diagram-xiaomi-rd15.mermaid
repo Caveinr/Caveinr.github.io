@@ -1,0 +1,51 @@
+graph TD
+    %% 定义样式
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef memory fill:#ff9,stroke:#333,stroke-width:1px;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef wireless fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef interface fill:#ddd,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+
+    subgraph 核心处理与存储
+        CPU[CPU: MT7986A<br>四核A53 1.1GHz]:::core
+        RAM[内存: GDP1BFLM-CB<br>256MB DDR3L 1866]:::memory
+        Flash[闪存: GD5F1GM7REYIG<br>128MB]:::memory
+    end
+
+    subgraph 有线网络部分
+        PHY1[2.5G PHY芯片<br>YT8821C]:::network
+        Switch[千兆交换芯片<br>YT9215S]:::network
+    end
+
+    subgraph 无线射频部分
+        RF5G[5G射频芯片<br>QCN6402]:::wireless
+        FEM5G[2颗 5G FEM<br>KCT8576HE]:::wireless
+        
+        FEM24G[2颗 2.4G FEM<br>KCT8245SD]:::wireless
+        
+        Antenna(4根外置天线):::interface
+    end
+    
+    subgraph 外围接口
+        Port25G_1(2.5G 网口):::interface
+        Ports1G(3个 千兆网口):::interface
+    end
+
+    %% 连接关系 - 存储
+    CPU <--> RAM
+    CPU <--> Flash
+    
+    %% 连接关系 - 有线网络
+    CPU <-->|HSGMII 总线<br>2.5Gbps| PHY1
+    CPU <-->|HSGMII 总线<br>2.5Gbps| Switch
+    
+    PHY1 <--> Port25G_1
+    Switch <--> Ports1G
+    
+    %% 连接关系 - 无线射频
+    CPU <-->|PCIe 3.0 x1<br>8Gbps| RF5G
+    RF5G <--> FEM5G
+    CPU <--> FEM24G
+    
+    FEM5G <--> Antenna
+    FEM24G <--> Antenna
