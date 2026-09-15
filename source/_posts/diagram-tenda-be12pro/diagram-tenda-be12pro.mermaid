@@ -13,15 +13,15 @@ graph TD
     end
 
     subgraph 有线网络部分
-        PHY1[2.5G PHY芯片 1<br>EN8811H]:::network
+        PHY[2.5G PHY芯片<br>EN8811H]:::network
         Switch[千兆交换芯片<br>AN8855]:::network
     end
 
     subgraph 无线射频部分
         WLANMAC[无线MAC芯片<br>MT7992AV]:::wireless
 
-        RF5G[5G RF射频芯片<br>MT7979N]:::wireless
-        RF24G[2.4G RF射频芯片<br>MT7975N]:::wireless
+        RF5G[5G射频芯片<br>MT7979N]:::wireless
+        RF24G[2.4G射频芯片<br>MT7975N]:::wireless
         
         Antenna((5根外置天线)):::interface
     end
@@ -37,15 +37,15 @@ graph TD
     CPU <--> Flash
     
     %% 连接关系 - 有线网络
-    CPU <-->|HSGMII 总线| PHY1
-    CPU <-->|HSGMII 总线| Switch
+    CPU <-->|HSGMII 总线<br>2.5Gbps| PHY
+    CPU <-->|HSGMII 总线<br>2.5Gbps| Switch
     
-    PHY1 <--> Port25G_1
+    PHY <--> Port25G_1
     CPU <--> Port25G_2
     Switch <--> Ports1G
     
     %% 连接关系 - 无线射频
-    CPU <-->|PCIE 3.0 x2| WLANMAC
+    CPU <-->|PCIE 3.0 x2<br>8Gbps| WLANMAC
     WLANMAC <--> RF5G
     WLANMAC <--> RF24G
     

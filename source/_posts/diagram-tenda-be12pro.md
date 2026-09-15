@@ -4,14 +4,8 @@ date: 2026-07-06 18:56:01
 tags: 
   - 路由器
   - 拓扑图
+index_img: 2026/diagram-tenda-be12pro/diagram-tenda-be12pro.png
 ---
-
-# 带宽图解
-
-{% asset_img diagram-tenda-be12pro.png %}
-
-注：
-* 虽然内存上的丝印有xxx**256**xxx的字样，但实际上它是一颗**512MB**的内存颗粒。
 
 # 基本信息
 
@@ -42,7 +36,14 @@ CPU:
   输入: 12V / 2A
 ```
 注：
-* 5Ghz芯片MT7979N硬件上是4T5R，多出来的一根天线是用于Filogic Xtra Range技术。官网上的描述来看该技术是用于增加连接范围，应该不实际增加带宽。
+* 5Ghz芯片MT7979N硬件上是5收4发（4T5R），多出来的一根天线是用于Filogic Xtra Range技术。官网上的描述来看该技术是用于增加连接范围，不实际增加带宽（即空间流SS仍然是4）。
+
+# 带宽图解
+
+{% asset_img diagram-tenda-be12pro.png %}
+
+注：
+* 虽然内存上的丝印有xxx**256**xxx的字样，但实际上它是一颗**512MB**的内存颗粒。
 
 # 参考链接
 
@@ -50,3 +51,4 @@ CPU:
    1. 宣传图中声称5Ghz支持5收5发是错误的，见前文基本信息的注解。
 2. 拆解：[MT7987A+BE7200不到300元，可能是刷机圣体 | 腾达be7200双频wifi7路由器](https://www.zhihu.com/tardis/zm/art/2000981694761694012)
 3. MT7987A的规格表：[香蕉派 BPI-R4 Lite Wifi 7 开源路由器开发板采用联发科MT7987芯片方案 | BananaPi Docs](https://docs.banana-pi.org/zh/BPI-R4_Lite/BananaPi_BPI-R4_Lite)
+4. 2.5G PHY芯片的宣传页：[Product Info | Airoha Technology](https://www.airoha.com/products/p/tKkm7DPXi5m6wY2D)
