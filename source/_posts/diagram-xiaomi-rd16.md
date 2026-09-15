@@ -43,9 +43,9 @@ CPU:
 
 注：
 * MT7990AN和AN7563PT之间是通过PCIe 2.0 x1连接推测的依据是使用MT7990AN做的无线网卡是这个规格。
+* 内存颗粒兼容DDR3和DDR3L两种电压。参考其它同CPU型号的机型这里应该是工作在DDR3的电压下。
 
 # 其它
-
 
 用着小米BE3600这名字一共有外形一致的三款型号，分别是：
  * 黑色外壳，型号名RD16，只有千兆网口，使用联发科子公司达发的AN7563PT。本文则是这款。
@@ -59,5 +59,7 @@ CPU:
    * 白色全千兆款：[Xiaomi路由器 BE3600立即购买-小米商城](https://www.mi.com/shop/buy/detail?product_id=19845)
    * 黑色全千兆款：[Xiaomi路由器BE3600(黑色）立即购买-小米商城](https://www.mi.com/shop/buy/detail?product_id=21494)
    * 两款全千兆款官网上都只有商场购买链接，感觉未来很有可能就打不开了......
-2. MT7990AN做的MiniPCIe无限网卡：[AW7990-NPD 802.11ax Wi-Fi 6 MT7990 Mini PCIe Wireless Card](asiarf.com/product/wifi-7-be3600-mini-pcie-ap-module-aw7990-npd)
-3. MT7976CN的技术手册：[MT7976CN Datasheet](https://datasheet4u.com/download/1603034/MT7976CN.html)
+2. 拆机：[小米BE3600黑色版拆机](https://www.acwifi.net/34369.html)
+3. 内存颗粒的技术手册：[W632GU6RB - W632GU6RB_A01.pdf](https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/6970/W632GU6RB_A01.pdf) 
+4. MT7990AN做的MiniPCIe无限网卡：[AW7990-NPD 802.11ax Wi-Fi 6 MT7990 Mini PCIe Wireless Card](asiarf.com/product/wifi-7-be3600-mini-pcie-ap-module-aw7990-npd)
+5. MT7976CN的技术手册：[MT7976CN Datasheet](https://datasheet4u.com/download/1603034/MT7976CN.html)
