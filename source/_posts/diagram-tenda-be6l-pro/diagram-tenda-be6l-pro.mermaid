@@ -1,0 +1,43 @@
+graph TD
+    %% 定义样式
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef memory fill:#ff9,stroke:#333,stroke-width:1px;
+    classDef network fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef wireless fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef interface fill:#ddd,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5;
+
+    subgraph 核心处理与存储
+        CPU[CPU: AN7563PT<br>双核A53 1.0GHz]:::core
+        RAM[内存: M15T4G16256A–DEBG2P<br>512MB DDR3L 1866]:::memory
+        Flash[闪存: F50L1G41LG<br>128MB]:::memory
+    end
+
+    subgraph 有线网络部分
+        PHY[2.5G PHY芯片<br>EN8811H]:::network
+    end
+
+    subgraph 无线射频部分
+        MACBB[基带&MAC芯片<br>MT7991A]:::wireless
+        RF5G[射频芯片<br>MT7976CN]:::wireless
+        
+        Antenna(5根外置天线):::interface
+    end
+    
+    subgraph 外围接口
+        Port25G(2.5G 网口):::interface
+        Ports1G(3个 千兆网口):::interface
+    end
+
+    %% 连接关系 - 存储
+    CPU <--> RAM
+    CPU <--> Flash
+    
+    %% 连接关系 - 有线网络
+    CPU <-->|内置| Ports1G
+    CPU <-->|HSGMII 总线<br>2.5Gbps| PHY
+    PHY <--> Port25G
+    
+    %% 连接关系 - 无线射频
+    CPU <-->|PCIe 2.0 x2<br>8Gbps| MACBB
+    MACBB <--> RF5G
+    RF5G <--> Antenna
